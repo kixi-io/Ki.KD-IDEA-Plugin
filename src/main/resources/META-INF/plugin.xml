@@ -1,0 +1,42 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <id>io.kixi.kd</id>
+    <name>Ki Data (KD)</name>
+    <vendor email="dan@leuck.org" url="https://github.com/kixi-io">Kixi.io</vendor>
+
+    <description><![CDATA[
+        <p>Support for Ki Data (KD) files in IntelliJ-based IDEs.</p>
+
+        <p>KD is a modern, readable document format for structured data with support for:</p>
+        <ul>
+            <li>Rich type system: strings, numbers, dates, durations, versions, geo-coordinates, and more</li>
+            <li>Hierarchical tag structure with annotations, values, and attributes</li>
+            <li>Units of measure (e.g., 5cm, 23.5kg)</li>
+            <li>Ranges, lists, maps, and grids</li>
+            <li>Unicode and emoji support</li>
+        </ul>
+
+        <p>Learn more at <a href="https://github.com/kixi-io/Ki.Docs">Ki.Docs</a></p>
+    ]]></description>
+
+    <change-notes><![CDATA[
+        <h3>1.0.0</h3>
+        <ul>
+            <li>Initial release</li>
+            <li>KD file type recognition with custom icon</li>
+        </ul>
+    ]]></change-notes>
+
+    <!-- Product and plugin compatibility requirements -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- File Type Registration -->
+        <fileType
+                name="KD File"
+                implementationClass="io.kixi.kd.intellij.KDFileType"
+                fieldName="INSTANCE"
+                language="KD"
+                extensions="kd"/>
+    </extensions>
+</idea-plugin>
