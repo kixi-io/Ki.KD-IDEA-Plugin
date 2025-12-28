@@ -12,6 +12,8 @@ import com.intellij.lang.Language
  */
 object KDLanguage : Language("KD") {
 
+    // test
+
     private fun readResolve(): Any = KDLanguage
 
     override fun getDisplayName(): String = "Ki Data"
