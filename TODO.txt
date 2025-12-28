@@ -1,0 +1,7 @@
+// TODO
+code coloring
+error detection and suggestion
+completion
+
+// Bugs
+None
