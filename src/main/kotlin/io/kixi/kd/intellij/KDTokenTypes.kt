@@ -1,25 +1,21 @@
 package io.kixi.kd.intellij
 
-import com.intellij.psi.TokenType
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.tree.TokenSet
 
 /**
- * Token types for the Ki Data (KD) language.
- *
- * These tokens are used by the lexer and syntax highlighter to identify
- * different elements in KD files.
+ * Token types for KD (Ki Data) language.
  */
 object KDTokenTypes {
 
-    // Base element type class for KD tokens
-    class KDElementType(debugName: String) : IElementType(debugName, KDLanguage)
+    // Whitespace
+    val WHITE_SPACE = KDElementType("WHITE_SPACE")
 
     // Comments
     val LINE_COMMENT = KDElementType("LINE_COMMENT")
     val BLOCK_COMMENT = KDElementType("BLOCK_COMMENT")
 
-    // Strings and Characters
+    // Strings
     val STRING = KDElementType("STRING")
     val RAW_STRING = KDElementType("RAW_STRING")
     val BLOCK_STRING = KDElementType("BLOCK_STRING")
@@ -34,12 +30,6 @@ object KDTokenTypes {
     val HEX_NUMBER = KDElementType("HEX_NUMBER")
     val BINARY_NUMBER = KDElementType("BINARY_NUMBER")
 
-    // Quantities and Units
-    val QUANTITY = KDElementType("QUANTITY")
-    val UNIT = KDElementType("UNIT")
-    val CURRENCY = KDElementType("CURRENCY")
-    val CURRENCY_PREFIX = KDElementType("CURRENCY_PREFIX")
-
     // Keywords
     val TRUE = KDElementType("TRUE")
     val FALSE = KDElementType("FALSE")
@@ -47,45 +37,55 @@ object KDTokenTypes {
     val ON = KDElementType("ON")
     val OFF = KDElementType("OFF")
 
-    // Date/Time/Duration
+    // Date/Time
     val DATE = KDElementType("DATE")
     val DATETIME = KDElementType("DATETIME")
+
+    // Duration
     val DURATION = KDElementType("DURATION")
 
     // Version
     val VERSION = KDElementType("VERSION")
 
-    // Special literals
+    // URL and Email
     val URL = KDElementType("URL")
     val EMAIL = KDElementType("EMAIL")
+
+    // Quantities and Currency
+    val QUANTITY = KDElementType("QUANTITY")
+    val CURRENCY = KDElementType("CURRENCY")
+
+    // Special dot literals
     val BLOB = KDElementType("BLOB")
     val GEO = KDElementType("GEO")
     val COORDINATE = KDElementType("COORDINATE")
     val GRID = KDElementType("GRID")
 
-    // Identifiers and namespaces
+    // Identifiers and Names (contextual)
     val IDENTIFIER = KDElementType("IDENTIFIER")
-    val NAMESPACE = KDElementType("NAMESPACE")
     val TAG_NAME = KDElementType("TAG_NAME")
     val ATTRIBUTE_KEY = KDElementType("ATTRIBUTE_KEY")
+    val NAMESPACE = KDElementType("NAMESPACE")
 
     // Annotations
-    val ANNOTATION = KDElementType("ANNOTATION")
-    val ANNOTATION_NAME = KDElementType("ANNOTATION_NAME")
-
-    // Operators and punctuation
-    val EQUALS = KDElementType("EQUALS")
-    val COLON = KDElementType("COLON")
     val AT = KDElementType("AT")
-    val DOT = KDElementType("DOT")
-    val RANGE_OP = KDElementType("RANGE_OP")          // ..
+    val ANNOTATION = KDElementType("ANNOTATION")
+
+    // Operators
+    val EQUALS = KDElementType("EQUALS")
+    val RANGE_OP = KDElementType("RANGE_OP")           // ..
     val RANGE_EX_RIGHT = KDElementType("RANGE_EX_RIGHT") // ..<
     val RANGE_EX_LEFT = KDElementType("RANGE_EX_LEFT")   // <..
     val RANGE_EXCLUSIVE = KDElementType("RANGE_EXCLUSIVE") // <..<
+
+    // Punctuation
+    val COLON = KDElementType("COLON")
     val SEMICOLON = KDElementType("SEMICOLON")
+    val DOT = KDElementType("DOT")
+    val COMMA = KDElementType("COMMA")
     val BACKSLASH = KDElementType("BACKSLASH")
 
-    // Brackets and braces
+    // Brackets
     val LBRACE = KDElementType("LBRACE")
     val RBRACE = KDElementType("RBRACE")
     val LBRACKET = KDElementType("LBRACKET")
@@ -95,17 +95,13 @@ object KDTokenTypes {
     val LANGLE = KDElementType("LANGLE")
     val RANGLE = KDElementType("RANGLE")
 
-    // Whitespace and bad characters
-    val WHITE_SPACE = TokenType.WHITE_SPACE
-    val BAD_CHARACTER = TokenType.BAD_CHARACTER
+    // Error
+    val BAD_CHARACTER = KDElementType("BAD_CHARACTER")
 
     // Token sets for grouping
     val COMMENTS = TokenSet.create(LINE_COMMENT, BLOCK_COMMENT)
     val STRINGS = TokenSet.create(STRING, RAW_STRING, BLOCK_STRING, CHAR)
     val NUMBERS = TokenSet.create(INTEGER, LONG, FLOAT, DOUBLE, DECIMAL, HEX_NUMBER, BINARY_NUMBER)
     val KEYWORDS = TokenSet.create(TRUE, FALSE, NIL, ON, OFF)
-    val OPERATORS = TokenSet.create(EQUALS, RANGE_OP, RANGE_EX_RIGHT, RANGE_EX_LEFT, RANGE_EXCLUSIVE)
-    val COMMA = KDElementType("COMMA")
     val BRACKETS = TokenSet.create(LBRACE, RBRACE, LBRACKET, RBRACKET, LPAREN, RPAREN, LANGLE, RANGLE)
-    val PUNCTUATION = TokenSet.create(COLON, SEMICOLON, DOT, BACKSLASH, AT)
 }

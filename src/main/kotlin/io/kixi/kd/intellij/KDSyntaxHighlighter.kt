@@ -12,13 +12,32 @@ import java.awt.Font
  * Syntax highlighter for Ki Data (KD) files.
  *
  * Maps KD token types to text attributes using colors from the Paints palette.
- * This provides semantic coloring for all KD language elements.
+ * Provides semantic coloring for all KD language elements with proper context
+ * awareness for tag names, attribute keys, annotations, and values.
+ *
+ * Color scheme (favoring base colors):
+ * - Tag names: Aqua (document structure)
+ * - Attribute keys: Lime (properties)
+ * - Annotations: Green (metadata)
+ * - Strings/Chars: Gold (text data)
+ * - Numbers: Violet (numeric data)
+ * - Keywords: Violet bold (true/false/nil)
+ * - Dates/Durations: Blue (temporal)
+ * - Versions: Lime (semantic versioning)
+ * - URLs/Emails: Aqua (links)
+ * - Currency: Gold (monetary)
+ * - Quantities: Violet (numbers with units)
+ * - Special literals: Green (blob/geo/coordinate/grid)
+ * - Operators: Blue (=, range ops)
+ * - Punctuation: Blue (not gray - visible)
+ * - Brackets: Magenta (structure delimiters)
+ * - Comments: Gray italic
  */
 class KDSyntaxHighlighter : SyntaxHighlighterBase() {
 
     companion object {
         // Helper function to create TextAttributesKey with color from Paints
-        private fun createKey(name: String, color: java.awt.Color, style: Int = Font.PLAIN): TextAttributesKey {
+        private fun key(name: String, color: java.awt.Color, style: Int = Font.PLAIN): TextAttributesKey {
             val attributes = TextAttributes().apply {
                 foregroundColor = color
                 fontType = style
@@ -26,74 +45,88 @@ class KDSyntaxHighlighter : SyntaxHighlighterBase() {
             return TextAttributesKey.createTextAttributesKey("KD_$name", attributes)
         }
 
-        // Comment - Gray
-        val COMMENT = createKey("COMMENT", Paints.Gray, Font.ITALIC)
+        // =====================================================================
+        // Document Structure
+        // =====================================================================
 
-        // Strings and Chars - Aqua
-        val STRING = createKey("STRING", Paints.Aqua)
-        val CHAR = createKey("CHAR", Paints.Aqua)
+        // Tag names - Aqua (the primary structural element)
+        val TAG_NAME = key("TAG_NAME", Paints.Aqua)
 
-        // Numbers - Violet
-        val NUMBER = createKey("NUMBER", Paints.Violet)
+        // Attribute keys - Lime (property names)
+        val ATTRIBUTE_KEY = key("ATTRIBUTE_KEY", Paints.Lime)
 
-        // Quantities - Blue
-        val QUANTITY = createKey("QUANTITY", Paints.Blue)
+        // Annotations - Green (metadata)
+        val ANNOTATION = key("ANNOTATION", Paints.Green)
 
-        // Units - BlueLight
-        val UNIT = createKey("UNIT", Paints.BlueLight)
+        // Namespace prefix - Magenta (qualified names)
+        val NAMESPACE = key("NAMESPACE", Paints.Magenta)
 
-        // Currency - Gold
-        val CURRENCY = createKey("CURRENCY", Paints.Gold)
+        // =====================================================================
+        // Values and Literals
+        // =====================================================================
 
-        // Keywords - Violet
-        val KEYWORD = createKey("KEYWORD", Paints.Violet, Font.BOLD)
+        // Strings and Characters - Gold (text data)
+        val STRING = key("STRING", Paints.FireOrange)
+        val CHAR = key("CHAR", Paints.Gold)
 
-        // Operators - Blue
-        val OPERATOR = createKey("OPERATOR", Paints.Blue)
+        // Numbers - Violet (numeric data)
+        val NUMBER = key("NUMBER", Paints.Violet)
 
-        // Namespace/Package - Lime
-        val NAMESPACE = createKey("NAMESPACE", Paints.Lime)
+        // Keywords - Violet bold (true, false, nil, on, off)
+        val KEYWORD = key("KEYWORD", Paints.Violet, Font.BOLD)
 
-        // Annotation - Green (like imports)
-        val ANNOTATION = createKey("ANNOTATION", Paints.Green)
+        // Date and DateTime - Blue (temporal data)
+        val DATETIME = key("DATETIME", Paints.Blue)
 
-        // Tag name - Magenta
-        val TAG_NAME = createKey("TAG_NAME", Paints.Magenta)
+        // Duration - Blue (time spans)
+        val DURATION = key("DURATION", Paints.Blue)
 
-        // Attribute key - MagentaLight
-        val ATTRIBUTE_KEY = createKey("ATTRIBUTE_KEY", Paints.MagentaLight)
+        // Version - Lime (semantic versions like numbers)
+        val VERSION = key("VERSION", Paints.Lime)
 
-        // Identifier - default (no special color)
-        val IDENTIFIER = createKey("IDENTIFIER", Paints.GrayLight)
+        // URL and Email - Aqua (links, like tag names since they're distinct)
+        val URL = key("URL", Paints.Aqua)
+        val EMAIL = key("EMAIL", Paints.Aqua)
 
-        // Date/Time - VioletLight
-        val DATETIME = createKey("DATETIME", Paints.VioletLight)
+        // Currency - Gold (monetary values, like numbers but distinct)
+        val CURRENCY = key("CURRENCY", Paints.Gold)
 
-        // Duration - VioletLight
-        val DURATION = createKey("DURATION", Paints.VioletLight)
+        // Quantities - Violet (numbers with units)
+        val QUANTITY = key("QUANTITY", Paints.Violet)
 
-        // Version - LimeLight
-        val VERSION = createKey("VERSION", Paints.LimeLight)
+        // Quantities - Violet (numbers with units)
+        val UNIT = key("UNIT", Paints.Green)
 
-        // URL - AquaLight
-        val URL = createKey("URL", Paints.AquaLight)
+        // Special dot literals - Green (blob, geo, coordinate, grid)
+        val SPECIAL_LITERAL = key("SPECIAL_LITERAL", Paints.Green)
 
-        // Email - AquaLight
-        val EMAIL = createKey("EMAIL", Paints.AquaLight)
+        // General identifier (when used as value) - Gold (like bare strings)
+        val IDENTIFIER = key("IDENTIFIER", Paints.Gold)
 
-        // Special literals (blob, geo, coordinate, grid) - GreenLight
-        val SPECIAL_LITERAL = createKey("SPECIAL_LITERAL", Paints.GreenLight)
+        // =====================================================================
+        // Operators and Punctuation
+        // =====================================================================
 
-        // Punctuation - Gray
-        val PUNCTUATION = createKey("PUNCTUATION", Paints.Gray)
+        // Operators - Blue (=, range operators)
+        val OPERATOR = key("OPERATOR", Paints.Blue)
 
-        // Brackets - GrayLight
-        val BRACKETS = createKey("BRACKETS", Paints.GrayLight)
+        // Punctuation - Blue (visible, not gray)
+        val PUNCTUATION = key("PUNCTUATION", Paints.Blue)
+
+        // Brackets - Magenta (structural delimiters)
+        val BRACKETS = key("BRACKETS", Paints.Magenta)
+
+        // =====================================================================
+        // Comments and Errors
+        // =====================================================================
+
+        // Comments - Gray italic
+        val COMMENT = key("COMMENT", Paints.Gray, Font.ITALIC)
 
         // Bad character - Red
-        val BAD_CHARACTER = createKey("BAD_CHARACTER", Paints.Red)
+        val BAD_CHARACTER = key("BAD_CHARACTER", Paints.Red)
 
-        // Empty array for tokens with no special highlighting
+        // Empty array for tokens with no highlighting
         private val EMPTY_KEYS = arrayOf<TextAttributesKey>()
     }
 
@@ -103,17 +136,32 @@ class KDSyntaxHighlighter : SyntaxHighlighterBase() {
         if (tokenType == null) return EMPTY_KEYS
 
         return when (tokenType) {
+            // =====================================================================
+            // Document Structure
+            // =====================================================================
+            KDTokenTypes.TAG_NAME -> arrayOf(TAG_NAME)
+            KDTokenTypes.ATTRIBUTE_KEY -> arrayOf(ATTRIBUTE_KEY)
+            KDTokenTypes.ANNOTATION -> arrayOf(ANNOTATION)
+            KDTokenTypes.AT -> arrayOf(ANNOTATION)
+            KDTokenTypes.NAMESPACE -> arrayOf(NAMESPACE)
+
+            // =====================================================================
             // Comments
+            // =====================================================================
             KDTokenTypes.LINE_COMMENT,
             KDTokenTypes.BLOCK_COMMENT -> arrayOf(COMMENT)
 
+            // =====================================================================
             // Strings and Characters
+            // =====================================================================
             KDTokenTypes.STRING,
             KDTokenTypes.RAW_STRING,
             KDTokenTypes.BLOCK_STRING -> arrayOf(STRING)
             KDTokenTypes.CHAR -> arrayOf(CHAR)
 
+            // =====================================================================
             // Numbers
+            // =====================================================================
             KDTokenTypes.INTEGER,
             KDTokenTypes.LONG,
             KDTokenTypes.FLOAT,
@@ -122,68 +170,73 @@ class KDSyntaxHighlighter : SyntaxHighlighterBase() {
             KDTokenTypes.HEX_NUMBER,
             KDTokenTypes.BINARY_NUMBER -> arrayOf(NUMBER)
 
-            // Quantities and Units
-            KDTokenTypes.QUANTITY -> arrayOf(QUANTITY)
-            KDTokenTypes.UNIT -> arrayOf(UNIT)
-
-            // Currency
-            KDTokenTypes.CURRENCY,
-            KDTokenTypes.CURRENCY_PREFIX -> arrayOf(CURRENCY)
-
+            // =====================================================================
             // Keywords
+            // =====================================================================
             KDTokenTypes.TRUE,
             KDTokenTypes.FALSE,
             KDTokenTypes.NIL,
             KDTokenTypes.ON,
             KDTokenTypes.OFF -> arrayOf(KEYWORD)
 
-            // Date/Time
+            // =====================================================================
+            // Date/Time and Duration
+            // =====================================================================
             KDTokenTypes.DATE,
             KDTokenTypes.DATETIME -> arrayOf(DATETIME)
-
-            // Duration
             KDTokenTypes.DURATION -> arrayOf(DURATION)
 
+            // =====================================================================
             // Version
+            // =====================================================================
             KDTokenTypes.VERSION -> arrayOf(VERSION)
 
+            // =====================================================================
             // URL and Email
+            // =====================================================================
             KDTokenTypes.URL -> arrayOf(URL)
             KDTokenTypes.EMAIL -> arrayOf(EMAIL)
 
-            // Special literals
+            // =====================================================================
+            // Currency and Quantities
+            // =====================================================================
+            KDTokenTypes.CURRENCY -> arrayOf(CURRENCY)
+            KDTokenTypes.QUANTITY -> arrayOf(QUANTITY)
+
+            // =====================================================================
+            // Special Literals
+            // =====================================================================
             KDTokenTypes.BLOB,
             KDTokenTypes.GEO,
             KDTokenTypes.COORDINATE,
             KDTokenTypes.GRID -> arrayOf(SPECIAL_LITERAL)
 
-            // Identifiers and names
+            // =====================================================================
+            // Identifiers (values)
+            // =====================================================================
             KDTokenTypes.IDENTIFIER -> arrayOf(IDENTIFIER)
-            KDTokenTypes.TAG_NAME -> arrayOf(TAG_NAME)
-            KDTokenTypes.ATTRIBUTE_KEY -> arrayOf(ATTRIBUTE_KEY)
 
-            // Namespace
-            KDTokenTypes.NAMESPACE -> arrayOf(NAMESPACE)
-
-            // Annotation
-            KDTokenTypes.ANNOTATION,
-            KDTokenTypes.ANNOTATION_NAME,
-            KDTokenTypes.AT -> arrayOf(ANNOTATION)
-
+            // =====================================================================
             // Operators
+            // =====================================================================
             KDTokenTypes.EQUALS,
             KDTokenTypes.RANGE_OP,
             KDTokenTypes.RANGE_EX_RIGHT,
             KDTokenTypes.RANGE_EX_LEFT,
             KDTokenTypes.RANGE_EXCLUSIVE -> arrayOf(OPERATOR)
 
+            // =====================================================================
             // Punctuation
+            // =====================================================================
             KDTokenTypes.COLON,
             KDTokenTypes.SEMICOLON,
             KDTokenTypes.DOT,
+            KDTokenTypes.COMMA,
             KDTokenTypes.BACKSLASH -> arrayOf(PUNCTUATION)
 
+            // =====================================================================
             // Brackets
+            // =====================================================================
             KDTokenTypes.LBRACE,
             KDTokenTypes.RBRACE,
             KDTokenTypes.LBRACKET,
@@ -193,9 +246,14 @@ class KDSyntaxHighlighter : SyntaxHighlighterBase() {
             KDTokenTypes.LANGLE,
             KDTokenTypes.RANGLE -> arrayOf(BRACKETS)
 
-            // Bad character
+            // =====================================================================
+            // Errors
+            // =====================================================================
             KDTokenTypes.BAD_CHARACTER -> arrayOf(BAD_CHARACTER)
 
+            // =====================================================================
+            // Default
+            // =====================================================================
             else -> EMPTY_KEYS
         }
     }

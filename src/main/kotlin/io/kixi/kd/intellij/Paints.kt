@@ -52,6 +52,7 @@ object Paints {
     val Violet = Color(111, 43, 178)     // 270° - Purple
     val Magenta = Color(170, 20, 133)    // 315° - Magenta/Pink
     val Red = Color(170, 20, 20)         // 0° - Red
+    val FireOrange = Color(170, 133, 20).mix(Red, .33f)
     val Gold = Color(170, 133, 20)       // 45° - Orange/Gold
     val Lime = Color(125, 155, 20)       // 90° - Yellow-Green
     val Green = Color(18, 153, 51)       // 135° - Green
