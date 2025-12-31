@@ -1,7 +1,5 @@
 package io.kixi.kd.intellij.ui
 
-import io.kixi.kd.intellij.ui.Paints.darker
-import io.kixi.kd.intellij.ui.Paints.lighter
 import java.awt.Color
 
 /**
@@ -48,36 +46,60 @@ object Paints {
         return Color(r, g, b)
     }
 
-    // Base color: Aqua at 180° hue
-    val Aqua = Color(20, 170, 170)
+    // Base colors - equally spaced around the color wheel (45° apart)
+    val Aqua = Color(18, 153, 153)       // 180° - Cyan
+    val Blue = Color(43, 76, 178)        // 225° - Blue
+    val Violet = Color(111, 43, 178)     // 270° - Purple
+    val Magenta = Color(170, 20, 133)    // 315° - Magenta/Pink
+    val Red = Color(170, 20, 20)         // 0° - Red
+    val Gold = Color(170, 133, 20)       // 45° - Orange/Gold
+    val Lime = Color(125, 155, 20)       // 90° - Yellow-Green
+    val Green = Color(18, 153, 51)       // 135° - Green
+    val Gray = Color(100, 100, 100)      // Neutral gray
 
-    // 7 additional colors at 45° intervals around the color wheel
-    // Color(20, 57, 170) lightened by 0.5 -> Color(137, 156, 212)
-    val Blue = Color(20, 57, 170).lighter( 0.25f)    // 225°
-    // If you want to see the color in IDE preview, use the computed value:
-    // val Blue = Color(137, 156, 212)    // 225° - lightened
-    val Violet = Color(95, 20, 170)     // 270°
-    val Magenta = Color(170, 20, 133)   // 315°
-    val Red = Color(170, 20, 20)        // 0°/360°
-    val Orange = Color(170, 133, 20)    // 45°
-    val Lime = Color(95, 170, 20).mix(Paints.Orange, 0.33f)       // Color(95, 170, 20)       // 90°
-    val Green = Color(20, 170, 57)      // 135°
+    // Light variants (33% lighter)
+    val AquaLight = Aqua.lighter(.33f)
+    val BlueLight = Blue.lighter(.33f)
+    val VioletLight = Violet.lighter(.33f)
+    val MagentaLight = Magenta.lighter(.33f)
+    val RedLight = Red.lighter(.33f)
+    val GoldLight = Gold.lighter(.33f)
+    val LimeLight = Lime.lighter(.33f)
+    val GreenLight = Green.lighter(.33f)
+    val GrayLight = Gray.lighter(.33f)
 
-    /** All 8 base colors in hue order starting from Aqua (180°) */
-    val baseColors = listOf(Aqua, Blue, Violet, Magenta, Red, Orange, Lime, Green)
+    // Dark variants (33% darker)
+    val AquaDark = Aqua.darker(.33f)
+    val BlueDark = Blue.darker(.33f)
+    val VioletDark = Violet.darker(.33f)
+    val MagentaDark = Magenta.darker(.33f)
+    val RedDark = Red.darker(.33f)
+    val GoldDark = Gold.darker(.33f)
+    val LimeDark = Lime.darker(.33f)
+    val GreenDark = Green.darker(.33f)
+    val GrayDark = Gray.darker(.33f)
 
-    /** Color names corresponding to baseColors list */
-    val colorNames = listOf("Aqua", "Blue", "Violet", "Magenta", "Red", "Orange", "Lime", "Green")
-}
+    /** All base colors in hue order starting from Aqua (180°) */
+    val colors = listOf(Aqua, Blue, Violet, Magenta, Red, Gold, Lime, Green, Gray)
 
-fun main(args: Array<String>) {
-    println(Paints.Blue)
-    println(Paints.Violet)
-    println(Paints.Magenta)
-    println(Paints.Red)
+    /** Light variant colors in hue order */
+    val colorsLight = listOf(
+        AquaLight, BlueLight, VioletLight, MagentaLight,
+        RedLight, GoldLight, LimeLight, GreenLight, GrayLight
+    )
 
-    println(Paints.Blue.lighter( 0.30f))
-    println(Paints.Violet.lighter( 0.30f))
-    println(Paints.Magenta.lighter( 0.30f))
-    println(Paints.Red.lighter( 0.30f))
+    /** Dark variant colors in hue order */
+    val colorsDark = listOf(
+        AquaDark, BlueDark, VioletDark, MagentaDark,
+        RedDark, GoldDark, LimeDark, GreenDark, GrayDark
+    )
+
+    /** Color names corresponding to colors list */
+    val colorNames = listOf(
+        "Aqua", "Blue", "Violet", "Magenta", "Red", "Gold", "Lime", "Green", "Gray"
+    )
+
+    /** Color names corresponding to colorsLight list */
+    val colorLightNames = listOf("AquaLight", "BlueLight", "VioletLight", "MagentaLight", "RedLight",
+        "GoldLight", "LimeLight", "GreenLight", "GrayLight")
 }

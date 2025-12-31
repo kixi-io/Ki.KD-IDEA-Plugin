@@ -38,5 +38,12 @@
                 fieldName="INSTANCE"
                 language="KD"
                 extensions="kd"/>
+        <lang.syntaxHighlighterFactory
+                language="KD"
+                implementationClass="io.kixi.kd.intellij.KDSyntaxHighlighterFactory"/>
+
+        <colorSettingsPage
+                implementation="io.kixi.kd.intellij.KDColorSettingsPage"/>
+
     </extensions>
 </idea-plugin>

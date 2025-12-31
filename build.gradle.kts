@@ -16,8 +16,10 @@ repositories {
 
 dependencies {
     intellijPlatform {
-        intellijIdeaCommunity("2024.3")
+
+        intellijIdeaCommunity("2025.1")  // Changed from 2024.3
         bundledPlugin("com.intellij.java")
+
         instrumentationTools()
     }
 
@@ -35,8 +37,8 @@ kotlin {
 
 tasks {
     patchPluginXml {
-        sinceBuild.set("243")
-        untilBuild.set("251.*")
+        sinceBuild.set("251")      // was "243"
+        untilBuild.set("253.*")    // was "251.*"
     }
 
     signPlugin {

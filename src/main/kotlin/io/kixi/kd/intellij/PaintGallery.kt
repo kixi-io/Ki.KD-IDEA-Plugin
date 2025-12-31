@@ -18,29 +18,11 @@ fun main() {
         panel.layout = GridLayout(0, 1, 5, 5)
         panel.border = BorderFactory.createEmptyBorder(10, 10, 10, 10)
 
-        // Add each color from Paints
-        val colors = listOf(
-            "Aqua" to Paints.Aqua.darker(.2f),
-            "Blue" to Paints.Blue.darker(.1f),
-            "Violet" to Paints.Violet.darker(.1f),
-            "Magenta" to Paints.Magenta.darker(.2f),
-            "Red" to Paints.Red.darker(.1f),
-            "Orange" to Paints.Orange.darker(.2f),
-            "Lime" to Paints.Lime.darker(.2f),
-            "Green" to Paints.Green.darker(.2f),
+        val colors = Paints.colors + Paints.colorsLight
+        val colorNames = Paints.colorNames + Paints.colorLightNames
 
-            "AquaLight" to Paints.Aqua.lighter(.33f),
-            "BlueLight" to Paints.Blue.lighter(.33f),
-            "VioletLight" to Paints.Violet.lighter(.33f),
-            "MagentaLight" to Paints.Magenta.lighter(.33f),
-            "RedLight" to Paints.Red.lighter(.33f),
-            "OrangeLight" to Paints.Orange.lighter(.33f),
-            "LimeLight" to Paints.Lime.lighter(.33f),
-            "GreenLight" to Paints.Green.lighter(.33f)
-        )
-
-        for ((name, color) in colors) {
-            panel.add(createColorRow(name, color))
+        for ((index, color) in colors.withIndex()) {
+            panel.add(createColorRow(colorNames[index], color))
         }
 
         frame.add(panel, BorderLayout.CENTER)
