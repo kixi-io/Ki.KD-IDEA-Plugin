@@ -12,6 +12,8 @@ import com.intellij.psi.tree.IElementType
  *
  * The KDParser has been tested with 1000+ unit tests, making this approach
  * more reliable than a simple regex-based lexer.
+ *
+ * Version 2.2.0 - Added support for .snip() literals.
  */
 class KDLexer : LexerBase() {
 
@@ -153,7 +155,7 @@ class KDLexer : LexerBase() {
             return scanNumberLike()
         }
 
-        // Dot literals: .blob(), .geo(), .coordinate(), .grid()
+        // Dot literals: .blob(), .geo(), .coordinate(), .grid(), .snip()
         if (ch == '.' && peek(1)?.isLetter() == true) {
             val result = tryScanDotLiteral()
             if (result != null) {
@@ -481,7 +483,7 @@ class KDLexer : LexerBase() {
     }
 
     // ========================================================================
-    // Dot Literals
+    // Dot Literals (.blob, .geo, .coordinate, .grid, .snip)
     // ========================================================================
 
     private fun tryScanDotLiteral(): IElementType? {
@@ -492,7 +494,8 @@ class KDLexer : LexerBase() {
         while (peek()?.isLetter() == true) tokenEnd++
         val name = buffer.substring(nameStart, tokenEnd).lowercase()
 
-        if (name !in listOf("blob", "geo", "coordinate", "grid")) {
+        // Recognize all dot literals including snip
+        if (name !in listOf("blob", "geo", "coordinate", "grid", "snip")) {
             tokenEnd = startPos
             return null
         }
@@ -530,6 +533,7 @@ class KDLexer : LexerBase() {
             "geo" -> KDTokenTypes.GEO
             "coordinate" -> KDTokenTypes.COORDINATE
             "grid" -> KDTokenTypes.GRID
+            "snip" -> KDTokenTypes.SNIP
             else -> KDTokenTypes.IDENTIFIER
         }
     }

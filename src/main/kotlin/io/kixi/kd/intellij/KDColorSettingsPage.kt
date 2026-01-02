@@ -12,6 +12,8 @@ import javax.swing.Icon
  *
  * This page appears in Settings > Editor > Color Scheme > KD and allows
  * users to customize the colors used for syntax highlighting.
+ *
+ * Version 2.2.0 - Added Snip literals to the color settings.
  */
 class KDColorSettingsPage : ColorSettingsPage {
 
@@ -37,6 +39,7 @@ class KDColorSettingsPage : ColorSettingsPage {
             AttributesDescriptor("URL", KDSyntaxHighlighter.URL),
             AttributesDescriptor("Email", KDSyntaxHighlighter.EMAIL),
             AttributesDescriptor("Special Literals", KDSyntaxHighlighter.SPECIAL_LITERAL),
+            AttributesDescriptor("Snip Literals", KDSyntaxHighlighter.SNIP),
             AttributesDescriptor("Punctuation", KDSyntaxHighlighter.PUNCTUATION),
             AttributesDescriptor("Brackets", KDSyntaxHighlighter.BRACKETS),
             AttributesDescriptor("Bad Character", KDSyntaxHighlighter.BAD_CHARACTER)
@@ -108,6 +111,12 @@ data .blob(SGVsbG8gV29ybGQ=)
 location .geo(35.6762, 139.6503)
 cell .coordinate(x=5, y=10)
 
+# Snip literals (external document references)
+.snip(components/navbar)
+.snip(../shared/database)
+.snip("path with spaces/config")
+.snip(pages/home, expand=true)
+
 # Collections
 list [1, 2, 3, 4, 5]
 map [name="Alice", age=30]
@@ -125,6 +134,21 @@ myTag "value" enabled=true
 parent {
     child1 "first"
     child2 "second"
+    # Nested snip
+    .snip(partials/footer)
+}
+
+# App structure with snips
+app {
+    header {
+        .snip(components/navbar)
+    }
+    content {
+        .snip(pages/home, expand=true)
+    }
+    footer {
+        .snip(components/footer)
+    }
 }
 """
     }

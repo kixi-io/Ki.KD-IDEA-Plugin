@@ -28,10 +28,13 @@ import java.awt.Font
  * - Currency: Gold (monetary)
  * - Quantities: Violet (numbers with units)
  * - Special literals: Green (blob/geo/coordinate/grid)
+ * - Snip literals: VioletLight (external references)
  * - Operators: Blue (=, range ops)
- * - Punctuation: Blue (not gray - visible)
+ * - Punctuation: Blue (visible, not gray)
  * - Brackets: Magenta (structure delimiters)
  * - Comments: Gray italic
+ *
+ * Version 2.2.0 - Added SNIP highlighting with VioletLight.
  */
 class KDSyntaxHighlighter : SyntaxHighlighterBase() {
 
@@ -99,6 +102,9 @@ class KDSyntaxHighlighter : SyntaxHighlighterBase() {
 
         // Special dot literals - Green (blob, geo, coordinate, grid)
         val SPECIAL_LITERAL = key("SPECIAL_LITERAL", Paints.Green)
+
+        // Snip literals - VioletLight (external document references)
+        val SNIP = key("SNIP", Paints.VioletLight)
 
         // General identifier (when used as value) - Gold (like bare strings)
         val IDENTIFIER = key("IDENTIFIER", Paints.Gold)
@@ -210,6 +216,9 @@ class KDSyntaxHighlighter : SyntaxHighlighterBase() {
             KDTokenTypes.GEO,
             KDTokenTypes.COORDINATE,
             KDTokenTypes.GRID -> arrayOf(SPECIAL_LITERAL)
+
+            // Snip - VioletLight (external document references)
+            KDTokenTypes.SNIP -> arrayOf(SNIP)
 
             // =====================================================================
             // Identifiers (values)

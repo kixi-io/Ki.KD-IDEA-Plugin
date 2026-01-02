@@ -5,6 +5,8 @@ import com.intellij.psi.tree.TokenSet
 
 /**
  * Token types for KD (Ki Data) language.
+ *
+ * Version 2.2.0 - Added SNIP token type for .snip() literals.
  */
 object KDTokenTypes {
 
@@ -60,6 +62,7 @@ object KDTokenTypes {
     val GEO = KDElementType("GEO")
     val COORDINATE = KDElementType("COORDINATE")
     val GRID = KDElementType("GRID")
+    val SNIP = KDElementType("SNIP")  // New in 2.2.0
 
     // Identifiers and Names (contextual)
     val IDENTIFIER = KDElementType("IDENTIFIER")
@@ -104,4 +107,5 @@ object KDTokenTypes {
     val NUMBERS = TokenSet.create(INTEGER, LONG, FLOAT, DOUBLE, DECIMAL, HEX_NUMBER, BINARY_NUMBER)
     val KEYWORDS = TokenSet.create(TRUE, FALSE, NIL, ON, OFF)
     val BRACKETS = TokenSet.create(LBRACE, RBRACE, LBRACKET, RBRACKET, LPAREN, RPAREN, LANGLE, RANGLE)
+    val DOT_LITERALS = TokenSet.create(BLOB, GEO, COORDINATE, GRID, SNIP)
 }
